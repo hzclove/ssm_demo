@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-3.0.xsd
+			http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+			http://www.springframework.org/schema/aop
+			http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<!-- 系统参数配置 -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">W
+			<list>
+				<value>classpath:conf/*/*.properties</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 系统配置 end -->
+	<!-- 数据源 -->
+	<bean id="dataSourcePlatform" primary="true"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="${jdbc.dbcp.maxActive}" />
+		<property name="maxIdle" value="${jdbc.dbcp.maxIdle}" />
+		<property name="minIdle" value="${jdbc.dbcp.minIdle}" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="60" />
+		<property name="maxWait" value="10000" />
+		<property name="logAbandoned" value="true" />
+		<property name="testOnBorrow">
+			<value>true</value>
+		</property>
+		<property name="testOnReturn">
+			<value>true</value>
+		</property>
+		<property name="testWhileIdle">
+			<value>true</value>
+		</property>
+		<property name="minEvictableIdleTimeMillis">
+			<value>180000</value>
+		</property>
+		<property name="timeBetweenEvictionRunsMillis">
+			<value>360000</value>
+		</property>
+		<property name="validationQuery">
+			<value>SELECT 1 FROM SYS.DUAL</value>
+		</property>
+	</bean>
+	<!-- 数据源 end -->
+	<!-- 配置mybatis核心工厂 sqlfactory -->
+	<bean id="sqlSessionFactoryPlatform" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- <property name="configLocation" value="classpath:com/conf/mybatis/mybatis.xml"></property> -->
+		<property name="dataSource" ref="dataSourcePlatform" />
+		<property name="mapperLocations"
+			value="classpath:com/teligen/platform/mine/project/basis/dao/mapper/Mapper*.xml" />
+	</bean>
+	<!-- 配置事务相关东西 -->
+	<bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransantionManager">
+		<property name="dataSource" ref="dataSourcePlatform"></property>
+	</bean>
+	<!-- 配置事务通知 -->
+	<tx:advice id="mybatisTxAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="list*" read-only="true" />
+			<tx:method name="create*" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- 配置事务的切面 -->
+	<aop:config>
+		<aop:pointcut id="transactionpointcut"
+			expression="execution(* com.teligen.platform.mine.project.basis.dao.impl.*.*(..))" />
+		<aop:advisor pointcut-ref="transactionpointcut"
+			advice-ref="mybatisTxAdvice" />
+	</aop:config>
+	<!--dataSourcejdbc -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSourcePlatform" />
+	</bean>
+</beans>
+
