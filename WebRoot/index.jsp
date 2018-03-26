@@ -2,8 +2,12 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+pageContext.setAttribute("contextPath", request.getContextPath());
 %>
-
+<script>
+	var path = "<%=path%>"
+</script>
+<jsp:include page="/assets/jquery/lib.jsp"></jsp:include>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -24,3 +28,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     This is my JSP page. <br>
   </body>
 </html>
+<script>
+	 $(document).ready(function () {
+       		var url = path+'/mine/basis/user.do?method=insert',
+                param={
+                	userId:1101,
+                	userName:"mine",
+                	password:"mine",
+                	memo:"test"
+                };
+            $.post(url,{param:JSON.stringify(param)}).then(function(res){
+                console.log(res)
+            });
+
+    }); 
+</script>

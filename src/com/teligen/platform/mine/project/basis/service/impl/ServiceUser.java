@@ -4,13 +4,16 @@ import com.teligen.platform.mine.project.basis.vo.VoUser;
 import com.teligen.platform.mine.project.basis.dao.base.IDaoUser;
 import com.teligen.platform.mine.project.basis.service.base.IServiceUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-//@Service
+import javax.annotation.Resource;
+
+@Service("com.teligen.platform.mine.project.basis.service.impl.ServiceUser")
 public class ServiceUser implements IServiceUser {
 
-  @Autowired
+  @Resource(name="com.teligen.platform.mine.project.basis.dao.impl.DaoUser")
   private IDaoUser daoUser;
 
   /**

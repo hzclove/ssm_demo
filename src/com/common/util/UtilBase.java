@@ -5,7 +5,6 @@ package com.common.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.matrix.loader.ClientPropertyLoader;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -484,20 +483,6 @@ public class UtilBase {
       phonenum = phonenum.substring(3, phonenum.length());
     }
     return phonenum;
-  }
-
-  /**
-   * 获取协议通知设置tableResource的notifyaddress属性的值
-   * @return
-   */
-  public static String getNotifyaddress(){
-    StringBuilder xmlBuilder = new StringBuilder();
-    xmlBuilder.append("MatrixClient.MRSService : tcp -h ");
-    xmlBuilder.append(ClientPropertyLoader.clientIp);
-    xmlBuilder.append(" -p ");
-    xmlBuilder.append(ClientPropertyLoader.clientPort);
-    //log.info(xmlBuilder.toString());
-    return xmlBuilder.toString();
   }
 
   public static void main(String[] args) {

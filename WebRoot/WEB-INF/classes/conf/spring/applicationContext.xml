@@ -23,6 +23,8 @@
     <context:component-scan base-package="com.teligen.*"/>
     <!-- 创建单例模式，避免重复创建spring上下文 -->
     <bean class="com.common.util.SpringContextUtil"/>
+    <!-- 引入数据库数据源 -->
+    <import resource="classpath:conf/spring/applicationContext_dataSource.xml"/>
     <!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->    
    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">    
        <property name="defaultEncoding" value="UTF-8"/>    
@@ -42,7 +44,5 @@
            </props>    
        </property>    
    </bean>  
-   <!-- 引入数据库数据源 -->
-    <import resource="classpath:conf/spring/applicationContext_dataSource.xml"/>
 </beans>
 

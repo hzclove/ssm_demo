@@ -15,7 +15,7 @@
 	<!-- 系统参数配置 -->
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">W
+		<property name="locations">
 			<list>
 				<value>classpath:conf/*/*.properties</value>
 			</list>
@@ -64,10 +64,6 @@
 			value="classpath:com/teligen/platform/mine/project/basis/dao/mapper/Mapper*.xml" />
 	</bean>
 	<!-- 配置事务相关东西 -->
-	<bean name="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransantionManager">
-		<property name="dataSource" ref="dataSourcePlatform"></property>
-	</bean>
 	<!-- 配置事务通知 -->
 	<tx:advice id="mybatisTxAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
@@ -85,7 +81,11 @@
 		<aop:advisor pointcut-ref="transactionpointcut"
 			advice-ref="mybatisTxAdvice" />
 	</aop:config>
-	<!--dataSourcejdbc -->
+	<bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourcePlatform"></property>
+	</bean>
+	<!-- dataSourcejdbc -->
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSourcePlatform" />
 	</bean>

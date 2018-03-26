@@ -6,10 +6,11 @@ import com.teligen.platform.mine.project.basis.dao.base.BDao;
 import com.teligen.platform.mine.project.basis.dao.base.IDaoUser;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-//@Service
+@Service("com.teligen.platform.mine.project.basis.dao.impl.DaoUser")
 public class DaoUser extends BDao implements IDaoUser {
   private static final Logger log = Logger.getLogger(DaoUser.class);
 
@@ -20,7 +21,7 @@ public class DaoUser extends BDao implements IDaoUser {
    */
   @Override
   public boolean insert(VoUser voUser) {
-    String statement = "com.teligen.platform.mine.project.basis.dao.mapper.MapperUser.insert";
+    String statement = "com.teligen.platform.mine.conf.mapper.basis.MapperUser.insert";
     SqlSession session = getSession();
     if (session == null) {
       log.warn("session is null!");
